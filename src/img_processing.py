@@ -7,7 +7,7 @@ import pytesseract
 from PIL import Image, ImageOps
 
 # load template image
-template = cv2.imread('template.png', 0)
+template = cv2.imread('images/template.png', 0)
 
 
 # match template to screenshot, identify where item text is and return top_left and bottom_right
@@ -107,23 +107,35 @@ def log_image(result):
     if result:
 
         image_list = glob.glob('images/working_crop*.png')
-        number_list = list()
-        for i in image_list:
-            number = i.replace('images\\working_crop', '')
-            number = number.replace('.png', '')
-            number_list.append(int(number))
+        if len(image_list) is not 0:
+            number_list = list()
+            for i in image_list:
+                number = i.replace('images\\working_crop', '')
+                number = number.replace('.png', '')
+                number_list.append(int(number))
 
-        number = max(number_list) + 1
+            number = max(number_list) + 1
+
+        else:
+
+            number = 1
+
         os.rename('images/cropped.png', f'images/working_crop{number}.png')
 
     else:
 
         image_list = glob.glob('images/broken_crop*.png')
-        number_list = list()
-        for i in image_list:
-            number = i.replace('images\\broken_crop', '')
-            number = number.replace('.png', '')
-            number_list.append(int(number))
+        if len(image_list) is not 0:
+            number_list = list()
+            for i in image_list:
+                number = i.replace('images\\broken_crop', '')
+                number = number.replace('.png', '')
+                number_list.append(int(number))
 
-        number = max(number_list)+1
+            number = max(number_list)+1
+
+        else:
+
+            number = 1
+
         os.rename('images/cropped.png', f'images/broken_crop{number}.png')
