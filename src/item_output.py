@@ -10,7 +10,6 @@ async def print_item_info(item_name: str):
         price_per_slot_text = main_price_text
 
     price_per_slot = parse_price_to_int(price_per_slot_text)
-    print(f"Item name: {item_name}")
 
     if price_per_slot > 50000:
         print_item_prices(main_price_text, price_per_slot_text, "cyan")

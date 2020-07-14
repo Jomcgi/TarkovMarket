@@ -13,6 +13,7 @@ async def fetch_price():
     page = globals.page
     search_bar = await page.querySelector('.search input[type="text"]')
     item_name = run()
+    print(f"Item name: {item_name}")
 
     await page.evaluate("""
     () => { const input = document.querySelector('.search input[type="text"]');
