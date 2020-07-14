@@ -1,8 +1,10 @@
 import src.globals as globals
 from src.img_processing import run
 import os
-from pyppeteer.errors import TimeoutError
 # make directory for storing images if it does not exist in path
+from src.item_output import print_item_info
+from src.pyppeteer import does_item_exist
+
 if not os.path.exists("images"):
     os.makedirs("images")
 
@@ -21,27 +23,5 @@ async def fetch_price():
         print(f"Could not find item: {item_name}")
         return
 
-    main_price = await get_text_from_selector("span.price-main")
-    price_per_slot = await get_text_from_selector("span.price-sec")
-    print(f"Item name: {item_name}")
-    print(f"Price is: {main_price}")
-    print(f"Price per slot: {price_per_slot}")
+    await print_item_info(item_name)
 
-async def does_item_exist(page, item_name):
-    try:
-        await page.waitForXPath(f"//span[contains(text(),'{item_name}')]", options={"timeout": 3000} )
-        return True
-    except TimeoutError:
-        return False
-
-async def get_text_from_selector(selector):
-    page = globals.page
-    element = await page.querySelector(selector)
-    if not element:
-        return "N/A"
-
-    text = await page.evaluate(
-        "(element) => element.textContent", element
-    )
-
-    return text.strip(' \n\r')

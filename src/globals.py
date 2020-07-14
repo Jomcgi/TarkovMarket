@@ -6,7 +6,7 @@ async def init():
     browser = await launch(
         handleSIGINT=False,
         handleSIGTERM=False,
-        handleSIGHUP=False,
+        handleSIGHUP=False
     )
     pages = await browser.pages()
     global page
