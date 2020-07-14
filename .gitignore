@@ -1,0 +1,14 @@
+
+images/screenshot.png
+src/__pycache__/globals.cpython-37.pyc
+src/__pycache__/img_processing.cpython-37.pyc
+src/__pycache__/item_price.cpython-37.pyc
+src/__pycache__/screenshot.cpython-37.pyc
+images/cropped.png
+.idea/workspace.xml
+.idea/vcs.xml
+.idea/TarkovMarket.iml
+.idea/modules.xml
+.idea/misc.xml
+.idea/inspectionProfiles/Project_Default.xml
+.idea/inspectionProfiles/profiles_settings.xml
