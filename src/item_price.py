@@ -1,60 +1,47 @@
-from selenium import webdriver
-import img_processing
-import time
+import src.globals as globals
+from src.img_processing import run
 import os
-
-
+from pyppeteer.errors import TimeoutError
 # make directory for storing images if it does not exist in path
-if not os.path.exists('images'):
-    os.makedirs('images')
-
-# hide mozilla
-os.environ['MOZ_HEADLESS'] = '1'
-
-# start selenium driver for firefox and open main page of tarkov-market
-driver = webdriver.Firefox()
-driver.get("https://tarkov-market.com")
-print('Ready')
+if not os.path.exists("images"):
+    os.makedirs("images")
 
 
-# find search bar and enter text from img_processing
-def main():
+async def fetch_price():
+    page = globals.page
+    search_bar = await page.querySelector('.search input[type="text"]')
+    item_name = run()
 
-    global driver
-    
-    search_bar = driver.find_element_by_css_selector("input[placeholder='Search'")
-    search_bar.clear()
-    search_bar.send_keys(img_processing.run())
-    time.sleep(2.5)
-    
+    await page.evaluate("""
+    () => { const input = document.querySelector('.search input[type="text"]');
+    input.value = '';
+    }""")
+    await search_bar.type(item_name)
+    if not await does_item_exist(page, item_name):
+        print(f"Could not find item: {item_name}")
+        return
+
+    main_price = await get_text_from_selector("span.price-main")
+    price_per_slot = await get_text_from_selector("span.price-sec")
+    print(f"Item name: {item_name}")
+    print(f"Price is: {main_price}")
+    print(f"Price per slot: {price_per_slot}")
+
+async def does_item_exist(page, item_name):
     try:
+        await page.waitForXPath(f"//span[contains(text(),'{item_name}')]", options={"timeout": 3000} )
+        return True
+    except TimeoutError:
+        return False
 
-        item_price = driver.find_element_by_class_name('price-main')
-        print(f'Flea: {item_price.text}')
-        result = True
+async def get_text_from_selector(selector):
+    page = globals.page
+    element = await page.querySelector(selector)
+    if not element:
+        return "N/A"
 
-    except:
+    text = await page.evaluate(
+        "(element) => element.textContent", element
+    )
 
-        print('No price detected')
-        print('logged broken crop')
-        result = False
-
-    try:
-
-        slot_price = driver.find_element_by_class_name('price-sec')
-        print(f'Per Slot: {slot_price.text}')
-
-    except:
-
-        try:
-
-            print(f'Per Slot: {item_price.text}')
-
-        except Exception:
-
-            pass
-
-    # trader = driver.find_element_by_class_name('item-card')
-    # print(trader)
-
-    img_processing.log_image(result)
+    return text.strip(' \n\r')
