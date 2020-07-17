@@ -1,6 +1,7 @@
 # TarkovMarket
 Return item prices from tarkov-market.com in-game
 
+![demo](documentation/demo.gif)
 ## Getting started
 Install dependencies:
 ```
@@ -17,10 +18,6 @@ Right click item in game, select inspect:
 ![inspect_item](https://i.imgur.com/As27sJf.png)
 
 Press CTRL + Z and the console will display pricing information:
-
-![console_output](https://i.imgur.com/vLrOMg0.png)
-
-Press PgDn to exit script
 
 ## Authors
 
